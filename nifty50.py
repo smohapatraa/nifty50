@@ -985,7 +985,7 @@ def fetch_gold_related_data():
     except Exception:
         pass
     try:
-        setfgold = yf.download("SETFGOLD.NS", period="90d", progress=False, auto_adjust=False)
+        setfgold = yf.download("setfgold.NS", period="90d", progress=False, auto_adjust=False)
         if not setfgold.empty:
             result['setfgold'] = setfgold
     except Exception:
@@ -1060,7 +1060,7 @@ def predict_next_day_open(gold_df, inr_df, etf_df):
     return predictions
 
 
-with st.spinner("Fetching gold, USD/INR, and SETFGOLD data..."):
+with st.spinner("Fetching gold, USD/INR, and setfgold data..."):
     gold_bundle = fetch_gold_related_data()
 
 gold_df = gold_bundle.get('gold') if gold_bundle else None
@@ -1112,7 +1112,7 @@ else:
             st.markdown(
                 f'<div style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); '
                 f'padding: 18px; border-radius: 12px; color: #000;">'
-                f'<h4>🇮🇳 SETFGOLD (NSE)</h4>'
+                f'<h4>🇮🇳 setfgold (NSE)</h4>'
                 f'<h2>₹{ec:,.2f}</h2>'
                 f'<p style="color:{color};font-size:16px;">{ec_chg:+.2f}%</p>'
                 f'<small>SBI Gold ETF</small></div>', unsafe_allow_html=True)
@@ -1142,12 +1142,12 @@ else:
         if 'setfgold' in predictions:
             p = predictions['setfgold']
             arrow = "🔼" if p['change_pct'] > 0 else ("🔽" if p['change_pct'] < 0 else "➡️")
-            st.metric("🇮🇳 SETFGOLD Open", f"₹{p['predicted_open']:,.2f}",
+            st.metric("🇮🇳 setfgold Open", f"₹{p['predicted_open']:,.2f}",
                       delta=f"{p['change_pct']:+.2f}% {arrow}")
             st.caption(f"Last: ₹{p['last_close']:,.2f}")
 
     st.divider()
-    st.markdown("### 📋 Trading Suggestion for SETFGOLD")
+    st.markdown("### 📋 Trading Suggestion for setfgold")
 
     if 'setfgold' in predictions and 'gold' in predictions and 'usdinr' in predictions:
         etf_pred_chg = predictions['setfgold']['change_pct']
@@ -1190,8 +1190,8 @@ else:
 |--------|-------|
 | 🌍 Gold Open | ${predictions['gold']['predicted_open']:,.2f} |
 | 💱 USD/INR Open | ₹{predictions['usdinr']['predicted_open']:,.4f} |
-| 🇮🇳 SETFGOLD Open | ₹{predictions['setfgold']['predicted_open']:,.2f} |
-| 📊 Expected SETFGOLD Change | {etf_pred_chg:+.2f}% |
+| 🇮🇳 setfgold Open | ₹{predictions['setfgold']['predicted_open']:,.2f} |
+| 📊 Expected setfgold Change | {etf_pred_chg:+.2f}% |
 | 🎯 Action | {suggestion} |
 """)
 
@@ -1336,7 +1336,7 @@ if etf_df is not None and len(etf_df) >= 20:
             f'padding: 25px; border-radius: 15px; color: white; text-align: center;">'
             f'<h2 style="margin:0; font-size: 42px;">{zones["zone"]}</h2>'
             f'<h3>{zones["action"]}</h3>'
-            f'<p style="font-size: 20px;">SETFGOLD: <b>₹{zones["last_close"]:,.2f}</b></p>'
+            f'<p style="font-size: 20px;">setfgold: <b>₹{zones["last_close"]:,.2f}</b></p>'
             f'</div>', unsafe_allow_html=True)
 
         st.markdown("")
@@ -1377,14 +1377,14 @@ if etf_df is not None and len(etf_df) >= 20:
 - Max Alloc: {max_gold_allocation_pct}%
 """)
 
-        st.markdown("### 📈 SETFGOLD Price with Buy/Sell Zones")
+        st.markdown("### 📈 setfgold Price with Buy/Sell Zones")
         chart_data = etf_df.tail(60).copy()
         chart_close = _squeeze_close(chart_data)
 
         fig_zones = go.Figure()
         fig_zones.add_trace(go.Scatter(
             x=chart_close.index, y=chart_close.values,
-            mode='lines', name='SETFGOLD',
+            mode='lines', name='setfgold',
             line=dict(color='#FFA500', width=2)
         ))
 
@@ -1409,7 +1409,7 @@ if etf_df is not None and len(etf_df) >= 20:
                             annotation_text=f"Sell All (+{sell_trigger_3}%)")
 
         fig_zones.update_layout(
-            title="SETFGOLD — 60-Day Chart with Trigger Levels",
+            title="setfgold — 60-Day Chart with Trigger Levels",
             xaxis_title="Date", yaxis_title="Price (₹)",
             height=500, hovermode='x unified'
         )
